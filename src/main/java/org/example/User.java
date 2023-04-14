@@ -8,6 +8,8 @@ public class User implements Serializable {
     public String username;
     public static ArrayList<Album> albums;
 
+    public static ArrayList<String> tagKeys;
+
     public User(String username){
         this.username=username;
     }

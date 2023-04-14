@@ -65,6 +65,17 @@ public class AlbumController implements Initializable {
         App.setRoot("searchScreen");
     }
     public void openPhoto() throws IOException{
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        if (p==null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Photo Open Error");
+            error.setContentText("No Photo Selected");
+            error.showAndWait();
+            return;
+        }
+        PhotoController.p = p;
+        PhotoController.a = album;
+        PhotoController.u = user;
         App.setRoot("photoDisplay");
     }
     public void deletePhoto() throws IOException{

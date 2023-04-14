@@ -6,6 +6,8 @@ public class SearchController {
 
     private int searchChoice=0;
     public void confirmSearch() throws IOException{
+        Album temp = new Album("temp");
+        
         App.setRoot("albumView");
     }
     public void cancelSearch() throws IOException{
