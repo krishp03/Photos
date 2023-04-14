@@ -1,8 +1,5 @@
 package org.example;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -18,12 +15,26 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for Photo View Screen
+ * @author Krish Patel
+ * @author Roshan Varadhan
+ */
 public class PhotoController implements Initializable {
 
+    /**
+     * Current Photo
+     */
     public static Photo p;
 
+    /**
+     * Album that photo belongs to
+     */
     public static Album a;
 
+    /**
+     * Current User
+     */
     public static User u;
 
     @FXML
@@ -37,10 +48,18 @@ public class PhotoController implements Initializable {
 
     @FXML Label selectedDate;
 
+    /**
+     * Returns to album view
+     * @throws IOException
+     */
     public void back() throws IOException {
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
 
+    /**
+     * Changes photo caption
+     * @throws IOException
+     */
     public void recaption() throws IOException {
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText("Recaption");
@@ -54,36 +73,55 @@ public class PhotoController implements Initializable {
             return;
         }
         p.setCaption(newCaption);
-        App.setRoot("photoDisplay");
+        Main.setRoot("photoDisplay");
     }
 
+    /**
+     * Opens add tag screen for photo
+     * @throws IOException
+     */
     public void addTag() throws IOException{
         TagController.p=p;
         TagController.u=u;
-        App.setRoot("addTag");
+        Main.setRoot("addTag");
     }
+
+    /**
+     * Deletes selected tag
+     * @throws IOException
+     */
     public void deleteTag() throws IOException{
         String s = tagListView.getSelectionModel().getSelectedItem();
         String fields[]=s.split("\\|");
         ArrayList<String> temp = p.getTags().get(fields[0]);
         temp.remove(fields[1]);
-        App.setRoot("photoDisplay");
+        Main.setRoot("photoDisplay");
     }
+
+    /**
+     * Next image in slideshow
+     * @throws IOException
+     */
     public void nextImage() throws IOException{
         int curr = a.getPhotos().indexOf(p);
         int next;
         if (curr == a.getPhotos().size()-1)next=0;
         else next=curr+1;
         PhotoController.p=a.getPhotos().get(next);
-        App.setRoot("photoDisplay");
+        Main.setRoot("photoDisplay");
     }
+
+    /**
+     * Previous image in slideshow
+     * @throws IOException
+     */
     public void prevImage() throws IOException{
         int curr = a.getPhotos().indexOf(p);
         int prev;
         if (curr == 0)prev=a.getPhotos().size()-1;
         else prev=curr-1;
         PhotoController.p=a.getPhotos().get(prev);
-        App.setRoot("photoDisplay");
+        Main.setRoot("photoDisplay");
     }
 
     @Override

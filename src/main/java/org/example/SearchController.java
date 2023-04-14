@@ -3,7 +3,6 @@ package org.example;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -12,8 +11,16 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+/**
+ * Controller for Search Screen
+ * @author Krish Patel
+ * @author Roshan Varadhan
+ */
 public class SearchController {
 
+    /**
+     * current album being searched
+     */
     public static Album album;
     @FXML
     DatePicker startDate;
@@ -25,7 +32,18 @@ public class SearchController {
     @FXML TextField tagTwo;
     @FXML TextField valueTwo;
 
+    /**
+     * Determines if search will be and, or, neither
+     * 0 for neither
+     * 1 for and
+     * 2 for or
+     */
     private int searchChoice=0;
+
+    /**
+     * retrieves search criteria and updates album view with only new photos
+     * @throws IOException
+     */
     public void confirmSearch() throws IOException{
         Album temp = new Album("Search Results");
         ZoneId defaultZoneId = ZoneId.systemDefault();
@@ -112,14 +130,29 @@ public class SearchController {
             }
         }
         AlbumController.album=temp;
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
+
+    /**
+     * returns to album view
+     * @throws IOException
+     */
     public void cancelSearch() throws IOException{
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
+
+    /**
+     * Allows for conjunctive search of tags
+     * @throws IOException
+     */
     public void setAndSearch() throws IOException{
         searchChoice=1;
     }
+
+    /**
+     * Allows for disjunctive search of tags
+     * @throws IOException
+     */
     public void setOrSearch() throws IOException{
         searchChoice=2;
     }
