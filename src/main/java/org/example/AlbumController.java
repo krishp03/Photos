@@ -1,7 +1,5 @@
 package org.example;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,16 +10,26 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the Album View Screen
+ * @author Krish Patel
+ * @author Roshan Varadhan
+ */
 public class AlbumController implements Initializable {
 
+    /**
+     * current album
+     */
     public static Album album;
+    /**
+     * current user that the album belongs to
+     */
     public static User user;
 
     @FXML ListView<Photo> photosListView = new ListView<Photo>();
@@ -33,9 +41,19 @@ public class AlbumController implements Initializable {
 
     @FXML Label numPhotos;
 
+    /**
+     * returns to main screen
+     * @throws IOException
+     */
     public void back() throws IOException{
-        App.setRoot("home");
+        Main.setRoot("home");
     }
+
+    /**
+     * Adds photo to album
+     * @param event, button pressed, used to find where to open popup
+     * @throws IOException
+     */
     public void addPhoto(ActionEvent event) throws IOException{
         Node buttonHome = (Node) event.getSource();
         FileChooser openFile = new FileChooser();
@@ -57,15 +75,31 @@ public class AlbumController implements Initializable {
             return;
         }
         Photo newPhoto = new Photo(photoFile, caption);
+        boolean added = album.addPhoto(newPhoto);
+        if (!added){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error Adding Photo");
+            error.setContentText("Photo is already in this album");
+            error.showAndWait();
+            return;
+        }
         photosListView.getItems().add(newPhoto);
-        album.addPhoto(newPhoto);
-//        showAlbum();
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
+
+    /**
+     * Opens search screen
+     * @throws IOException
+     */
     public void startSearch() throws IOException{
         SearchController.album=album;
-        App.setRoot("searchScreen");
+        Main.setRoot("searchScreen");
     }
+
+    /**
+     * Opens photo display screen for selected photo
+     * @throws IOException
+     */
     public void openPhoto() throws IOException{
         Photo p = photosListView.getSelectionModel().getSelectedItem();
         if (p==null){
@@ -78,15 +112,24 @@ public class AlbumController implements Initializable {
         PhotoController.p = p;
         PhotoController.a = album;
         PhotoController.u = user;
-        App.setRoot("photoDisplay");
+        Main.setRoot("photoDisplay");
     }
+
+    /**
+     * deletes selected photo
+     * @throws IOException
+     */
     public void deletePhoto() throws IOException{
         Photo p = photosListView.getSelectionModel().getSelectedItem();
         photosListView.getItems().remove(p);
         album.deletePhoto(p);
-//        showAlbum();
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
+
+    /**
+     * Opens move screen to move photo to separate album
+     * @throws IOException
+     */
     public void movePhoto() throws IOException{
         MoveController.user = user;
         MoveController.currAlbum=album;
@@ -100,8 +143,13 @@ public class AlbumController implements Initializable {
         }
         MoveController.photo=p;
         album.deletePhoto(p);
-        App.setRoot("movePhoto");
+        Main.setRoot("movePhoto");
     }
+
+    /**
+     * Opens copy screen to copy photo to new album
+     * @throws IOException
+     */
     public void copyPhoto() throws IOException{
         CopyController.user = user;
         Photo p = photosListView.getSelectionModel().getSelectedItem();
@@ -113,8 +161,13 @@ public class AlbumController implements Initializable {
             return;
         }
         CopyController.photo=p;
-        App.setRoot("copyPhoto");
+        Main.setRoot("copyPhoto");
     }
+
+    /**
+     * Creates a new album from the photos being shown
+     * @throws IOException
+     */
     public void createFromResults() throws IOException{
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText("Create New Album");
@@ -131,11 +184,21 @@ public class AlbumController implements Initializable {
         }
         Album a = new Album(newName);
         for (Photo p:album.getPhotos()) a.addPhoto(p);
-        user.addAlbum(a);
+        boolean added = user.addAlbum(a);
+        if (!added){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error Creating Album");
+            error.setContentText("Album already exists");
+            error.showAndWait();
+            return;
+        }
         AlbumController.album=a;
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
 
+    /**
+     * Updates album view to display attributes of the album
+     */
     private void showAlbum(){
         albumNameLabel.setText(album.name);
         Date earliest = album.getEarliestDate();

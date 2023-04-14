@@ -1,30 +1,38 @@
 package org.example;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for Admin user
+ * Implements functionality for adding and removing users
+ * @author Krish Patel
+ * @author Roshan Varadhan
+ */
 public class AdminController implements Initializable {
 
         @FXML
     ListView<User> userListView = new ListView<User>();
 
+    /**
+     * Logs out of the admin
+     * @throws IOException
+     */
     public void logout() throws IOException {
-        App.setRoot("login");
+        Main.setRoot("login");
     }
 
+    /**
+     * Allows Admin to add a user when button is pressed
+     * @throws IOException
+     */
     public void addUser() throws  IOException {
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText("Add User");
@@ -58,6 +66,10 @@ public class AdminController implements Initializable {
         userListView.getItems().add(u);
     }
 
+    /**
+     * Deletes selected user from application
+     * @throws IOException
+     */
     public void deleteUser() throws IOException {
         User u = userListView.getSelectionModel().getSelectedItem();
         userListView.getItems().remove(u);

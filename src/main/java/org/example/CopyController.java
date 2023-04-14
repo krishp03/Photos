@@ -11,13 +11,29 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for Copying photos between albums
+ * @author Krish Patel
+ * @author Roshan Varadhan
+ */
 public class CopyController implements Initializable {
 
+    /**
+     * current user
+     */
     public static User user;
 
+    /**
+     * photo to be copied
+     */
     public static Photo photo;
     @FXML
     ComboBox<Album> destCopyAlbum;
+
+    /**
+     * Copys photo to new album if possible
+     * @throws IOException
+     */
     public void confirmCopy() throws IOException{
         AlbumController.user = user;
         Album dest = destCopyAlbum.getValue();
@@ -28,12 +44,24 @@ public class CopyController implements Initializable {
             error.showAndWait();
             return;
         }
-        dest.addPhoto(photo);
+        boolean added = dest.addPhoto(photo);
+        if (!added){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error Adding Photo");
+            error.setContentText("Photo is already in this album");
+            error.showAndWait();
+            return;
+        }
         AlbumController.album = dest;
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
+
+    /**
+     * returns to album view
+     * @throws IOException
+     */
     public void cancelCopy() throws IOException{
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {

@@ -5,23 +5,39 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for Move Photo Screen
+ * @author Krish Patel
+ * @author Roshan Varadhan
+ */
 public class MoveController implements Initializable {
 
+    /**
+     * Current user
+     */
     public static User user;
-
+    /**
+     * Source album
+     */
     public static Album currAlbum;
 
+    /**
+     * Photo to be moved
+     */
     public static Photo photo;
     @FXML
     ComboBox<Album> moveDestAlbum;
 
+    /**
+     * Moves photo to new album if possible
+     * @throws IOException
+     */
     public void confirmMove() throws IOException{
         AlbumController.user = user;
         Album dest = moveDestAlbum.getValue();
@@ -32,13 +48,25 @@ public class MoveController implements Initializable {
             error.showAndWait();
             return;
         }
-        dest.addPhoto(photo);
+        boolean added = dest.addPhoto(photo);
+        if (!added){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error Adding Photo");
+            error.setContentText("Photo is already in this album");
+            error.showAndWait();
+            return;
+        }
         AlbumController.album = dest;
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
+
+    /**
+     * Cancels moving photo
+     * @throws IOException
+     */
     public void cancelMove() throws IOException{
         currAlbum.addPhoto(photo);
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
 
     @Override

@@ -1,8 +1,5 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -11,13 +8,20 @@ import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+/**
+ * Controller for Home Screen
+ * @author Krish Patel
+ * @author Roshan Varadhan
+ */
 public class HomeController implements Initializable {
 
+    /**
+     * current user
+     */
     public static User user;
 
     @FXML
@@ -30,17 +34,28 @@ public class HomeController implements Initializable {
     @FXML Label welcomeMessage;
 
 
-
+    /**
+     * logs out of system
+     * @throws IOException
+     */
     @FXML private void logout() throws IOException {
-        App.setRoot("login");
+        Main.setRoot("login");
     }
 
+    /**
+     * Opens selected album
+     * @throws IOException
+     */
     public void albumOpen() throws IOException{
         AlbumController.user = user;
         AlbumController.album = albumListView.getSelectionModel().getSelectedItem();
-        App.setRoot("albumView");
+        Main.setRoot("albumView");
     }
 
+    /**
+     * Creates new album
+     * @throws IOException
+     */
     public void createAlbum() throws IOException {
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText("Create New Album");
@@ -56,18 +71,32 @@ public class HomeController implements Initializable {
             }
         }
         Album a = new Album(newName);
-        user.addAlbum(a);
+        boolean added = user.addAlbum(a);
+        if (!added){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error Creating Album");
+            error.setContentText("Album already exists");
+            error.showAndWait();
+            return;
+        }
         albumListView.getItems().add(a);
     }
 
+    /**
+     * deletes selected album
+     * @throws IOException
+     */
     public void deleteAlbum() throws IOException{
         Album a = albumListView.getSelectionModel().getSelectedItem();
         albumListView.getItems().remove(a);
         user.getAlbums().remove(a);
     }
 
+    /**
+     * opens dialog to rename selected album
+     * @throws IOException
+     */
     public void renameAlbum() throws IOException {
-
         Album a = albumListView.getSelectionModel().getSelectedItem();
         TextInputDialog td = new TextInputDialog();
         td.setHeaderText("Create New Album");
@@ -88,6 +117,9 @@ public class HomeController implements Initializable {
         albumListView.getSelectionModel().select(a);
     }
 
+    /**
+     * Displays all attributes of the selected album
+     */
     private void showAlbum(){
         Album curr = albumListView.getSelectionModel().getSelectedItem();
         if(curr!=null) {
@@ -104,8 +136,6 @@ public class HomeController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
         welcomeMessage.setText(user.getUsername() + "'s Photo Gallery");
         for (Album a: user.getAlbums()) albumListView.getItems().add(a);
         albumListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Album>(){
