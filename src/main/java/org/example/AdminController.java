@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 public class AdminController implements Initializable {
 
         @FXML
-    public ListView<User> userListView = new ListView<User>();
+    ListView<User> userListView = new ListView<User>();
 
     /**
      * Logs out of the admin
