@@ -1,5 +1,4 @@
 org\example\MoveController.class
-org\example\PrimaryController.class
 org\example\Admin.class
 org\example\HomeController$1.class
 org\example\User.class
@@ -12,6 +11,5 @@ org\example\AlbumController.class
 org\example\HomeController.class
 org\example\SearchController.class
 org\example\CopyController.class
-org\example\SecondaryController.class
 org\example\AdminController.class
 org\example\TagController.class

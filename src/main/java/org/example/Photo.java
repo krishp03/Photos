@@ -23,7 +23,7 @@ public class Photo implements Serializable {
     }
 
     public void addTag(String tag, String value){
-        if (tags.containsKey(tag)){
+        if (!tags.containsKey(tag)){
             ArrayList<String> values = new ArrayList<>();
             tags.put(tag, values);
         }

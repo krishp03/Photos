@@ -1,7 +1,10 @@
 package org.example;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -9,8 +12,12 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class PhotoController {
+public class PhotoController implements Initializable {
 
     public static Photo p;
 
@@ -46,6 +53,7 @@ public class PhotoController {
             return;
         }
         p.setCaption(newCaption);
+        App.setRoot("photoDisplay");
     }
 
     public void addTag() throws IOException{
@@ -54,8 +62,37 @@ public class PhotoController {
         App.setRoot("addTag");
     }
     public void deleteTag() throws IOException{
-
+        String s = tagListView.getSelectionModel().getSelectedItem();
+        String fields[]=s.split("\\|");
+        ArrayList<String> temp = p.tags.get(fields[0]);
+        temp.remove(fields[1]);
+        App.setRoot("photoDisplay");
     }
-    public void nextImage() throws IOException{}
-    public void prevImage() throws IOException{}
+    public void nextImage() throws IOException{
+        int curr = a.getPhotos().indexOf(p);
+        int next;
+        if (curr == a.getPhotos().size()-1)next=0;
+        else next=curr+1;
+        PhotoController.p=a.getPhotos().get(next);
+        App.setRoot("photoDisplay");
+    }
+    public void prevImage() throws IOException{
+        int curr = a.getPhotos().indexOf(p);
+        int prev;
+        if (curr == 0)prev=a.getPhotos().size()-1;
+        else prev=curr-1;
+        PhotoController.p=a.getPhotos().get(prev);
+        App.setRoot("photoDisplay");
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        selectedCaption.setText(p.getCaption());
+        SimpleDateFormat sdformat = new SimpleDateFormat("yyyy/MM/dd");
+        selectedDate.setText(sdformat.format(p.date));
+        for (String key: p.tags.keySet()) {
+            ArrayList<String> values = p.tags.get(key);
+            for (String s:values) tagListView.getItems().add(key + "|" + s);
+        }
+    }
 }

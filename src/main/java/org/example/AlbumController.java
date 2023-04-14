@@ -62,6 +62,7 @@ public class AlbumController implements Initializable {
         showAlbum();
     }
     public void startSearch() throws IOException{
+        SearchController.album=album;
         App.setRoot("searchScreen");
     }
     public void openPhoto() throws IOException{

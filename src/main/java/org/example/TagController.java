@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class TagController implements Initializable {
@@ -38,6 +39,7 @@ public class TagController implements Initializable {
                 return;
             }
             p.addTag(tagTypeList.getSelectionModel().getSelectedItem(), value);
+            App.setRoot("photoDisplay");
             return;
         }
         String newTag = addTagTypeText.getText();
@@ -49,7 +51,11 @@ public class TagController implements Initializable {
             return;
         }
         p.addTag(newTag,value);
-        if (!u.tagKeys.contains(newTag)) u.tagKeys.add(newTag);
+        if (u.tagKeys==null) u.tagKeys = new ArrayList<String>();
+        if (!u.tagKeys.contains(newTag)) {
+            u.tagKeys.add(newTag);
+            for (String s: u.tagKeys) System.out.println(s);
+        }
         App.setRoot("photoDisplay");
     }
 
@@ -58,6 +64,6 @@ public class TagController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tagTypeList.getItems().addAll(u.tagKeys);
+        if (u.tagKeys!=null) for (String s:u.tagKeys) tagTypeList.getItems().add(s);
     }
 }
