@@ -68,13 +68,38 @@ public class AlbumController implements Initializable {
         App.setRoot("photoDisplay");
     }
     public void deletePhoto() throws IOException{
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        photosListView.getItems().remove(p);
+        album.deletePhoto(p);
         showAlbum();
     }
     public void movePhoto() throws IOException{
+        MoveController.user = user;
+        MoveController.currAlbum=album;
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        if (p==null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Photo Move Error");
+            error.setContentText("No Photo Selected");
+            error.showAndWait();
+            return;
+        }
+        MoveController.photo=p;
+        album.deletePhoto(p);
         App.setRoot("movePhoto");
-        showAlbum();
     }
     public void copyPhoto() throws IOException{
+        MoveController.user = user;
+        MoveController.currAlbum=album;
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        if (p==null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Photo Copy Error");
+            error.setContentText("No Photo Selected");
+            error.showAndWait();
+            return;
+        }
+        MoveController.photo=p;
         App.setRoot("copyPhoto");
     }
     public void createFromResults() throws IOException{
