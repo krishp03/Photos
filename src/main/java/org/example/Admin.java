@@ -1,7 +1,6 @@
 package org.example;
 
 import java.io.Serializable;
-import java.sql.Array;
 import java.util.ArrayList;
 
 /**
