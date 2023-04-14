@@ -69,11 +69,11 @@ public class SearchController {
                 }
             } else {
                 for (Photo p : album.getPhotos()) {
-                    if (p.tags.containsKey(keyOne)) if (p.tags.get(keyOne).contains(firstValue)) temp.addPhoto(p);
+                    if (p.getTags().containsKey(keyOne)) if (p.getTags().get(keyOne).contains(firstValue)) temp.addPhoto(p);
                 }
             }
                 for (Photo p : album.getPhotos())
-                    if (p.date.compareTo(start) > 0 && p.date.compareTo(end) < 0)
+                    if (p.getDate().compareTo(start) > 0 && p.getDate().compareTo(end) < 0)
                         if (!temp.getPhotos().contains(p)) temp.addPhoto(p);
             }
         else{
@@ -81,12 +81,30 @@ public class SearchController {
             String secondValue = valueTwo.getText();
             if (searchChoice==0){
                 for (Photo p : album.getPhotos()) {
-                    if (p.tags.containsKey(keyOne)) if (p.tags.get(keyOne).contains(firstValue)) temp.addPhoto(p);
+                    if (p.getTags().containsKey(keyOne)) if (p.getTags().get(keyOne).contains(firstValue)) temp.addPhoto(p);
                 }
             }
             else{
-                if (secondKey==null || secondValue==null || secondValue.isEmpty() || secondKey.isEmpty()){
-
+                if (!(secondKey==null || secondValue==null || secondValue.isEmpty() || secondKey.isEmpty())){
+                    if (searchChoice==1){
+                        for (Photo p : album.getPhotos()) {
+                            if (p.getTags().containsKey(keyOne)){
+                                if (p.getTags().get(keyOne).contains(firstValue)){
+                                    if (p.getTags().containsKey(secondKey)){
+                                        if (p.getTags().get(secondKey).contains(secondValue)){
+                                            temp.addPhoto(p);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        for (Photo p:album.getPhotos()){
+                            if (p.getTags().containsKey(keyOne)) if (p.getTags().get(keyOne).contains(firstValue)) temp.addPhoto(p);
+                            if (p.getTags().containsKey(secondKey)) if (p.getTags().get(secondKey).contains(secondValue)) if(!temp.getPhotos().contains(p)) temp.addPhoto(p);
+                        }
+                    }
                 }
             }
         }

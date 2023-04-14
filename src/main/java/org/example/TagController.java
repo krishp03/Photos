@@ -51,10 +51,10 @@ public class TagController implements Initializable {
             return;
         }
         p.addTag(newTag,value);
-        if (u.tagKeys==null) u.tagKeys = new ArrayList<String>();
-        if (!u.tagKeys.contains(newTag)) {
-            u.tagKeys.add(newTag);
-            for (String s: u.tagKeys) System.out.println(s);
+        if (u.getTagKeys()==null) u.initKeys();
+        if (!u.getTagKeys().contains(newTag)) {
+            u.getTagKeys().add(newTag);
+            for (String s: u.getTagKeys()) System.out.println(s);
         }
         App.setRoot("photoDisplay");
     }
@@ -64,6 +64,6 @@ public class TagController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (u.tagKeys!=null) for (String s:u.tagKeys) tagTypeList.getItems().add(s);
+        if (u.getTagKeys()!=null) for (String s:u.getTagKeys()) tagTypeList.getItems().add(s);
     }
 }

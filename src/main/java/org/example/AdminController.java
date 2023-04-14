@@ -45,7 +45,7 @@ public class AdminController implements Initializable {
             return;
         }
         for (User u:Admin.users){
-            if (u.username.equals(username)){
+            if (u.getUsername().equals(username)){
                 Alert error = new Alert(Alert.AlertType.ERROR);
                 error.setTitle("Error Adding User");
                 error.setContentText("User already exists");

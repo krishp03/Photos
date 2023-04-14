@@ -6,15 +6,16 @@ import java.util.ArrayList;
 public class User implements Serializable {
 
     public String username;
-    public static ArrayList<Album> albums;
+    public ArrayList<Album> albums;
 
-    public static ArrayList<String> tagKeys;
+    public ArrayList<String> tagKeys;
 
     public User(String username){
         this.username=username;
     }
 
     public String getUsername(){return username;}
+    public ArrayList<String> getTagKeys(){return tagKeys;}
 
     public ArrayList<Album> getAlbums(){return albums;}
 
@@ -25,4 +26,6 @@ public class User implements Serializable {
 
     public String toString(){return username;}
 
+    public void initKeys() {tagKeys = new ArrayList<String>();
+    }
 }

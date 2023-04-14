@@ -101,8 +101,7 @@ public class AlbumController implements Initializable {
         App.setRoot("movePhoto");
     }
     public void copyPhoto() throws IOException{
-        MoveController.user = user;
-        MoveController.currAlbum=album;
+        CopyController.user = user;
         Photo p = photosListView.getSelectionModel().getSelectedItem();
         if (p==null){
             Alert error = new Alert(Alert.AlertType.ERROR);
@@ -111,7 +110,7 @@ public class AlbumController implements Initializable {
             error.showAndWait();
             return;
         }
-        MoveController.photo=p;
+        CopyController.photo=p;
         App.setRoot("copyPhoto");
     }
     public void createFromResults() throws IOException{
@@ -129,7 +128,10 @@ public class AlbumController implements Initializable {
             }
         }
         Album a = new Album(newName);
+        for (Photo p:album.getPhotos()) a.addPhoto(p);
         user.addAlbum(a);
+        AlbumController.album=a;
+        App.setRoot("albumView");
     }
 
     private void showAlbum(){
@@ -145,7 +147,7 @@ public class AlbumController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        showAlbum();
         for (Photo a: album.getPhotos()) photosListView.getItems().add(a);
+        showAlbum();
     }
 }

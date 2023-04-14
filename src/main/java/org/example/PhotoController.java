@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class PhotoController implements Initializable {
     public void deleteTag() throws IOException{
         String s = tagListView.getSelectionModel().getSelectedItem();
         String fields[]=s.split("\\|");
-        ArrayList<String> temp = p.tags.get(fields[0]);
+        ArrayList<String> temp = p.getTags().get(fields[0]);
         temp.remove(fields[1]);
         App.setRoot("photoDisplay");
     }
@@ -89,9 +90,13 @@ public class PhotoController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         selectedCaption.setText(p.getCaption());
         SimpleDateFormat sdformat = new SimpleDateFormat("yyyy/MM/dd");
-        selectedDate.setText(sdformat.format(p.date));
-        for (String key: p.tags.keySet()) {
-            ArrayList<String> values = p.tags.get(key);
+        System.out.println(p.getImage().getAbsolutePath());
+        Image image = new Image(p.getImage().toURI().toString());
+        selectedImage.setImage(image);
+        selectedImage.setPreserveRatio(true);
+        selectedDate.setText(sdformat.format(p.getDate()));
+        for (String key: p.getTags().keySet()) {
+            ArrayList<String> values = p.getTags().get(key);
             for (String s:values) tagListView.getItems().add(key + "|" + s);
         }
     }
