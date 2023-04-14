@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class SearchController {
@@ -32,7 +33,7 @@ public class SearchController {
         Date start=null, end=null;
         if (startLocal!=null) start = Date.from(startLocal.atStartOfDay(defaultZoneId).toInstant());
         LocalDate endLocal = endDate.getValue();
-        if (endLocal!=null) end = Date.from(startLocal.atStartOfDay(defaultZoneId).toInstant());
+        if (endLocal!=null) end = Date.from(endLocal.atStartOfDay(defaultZoneId).toInstant().plus(1, ChronoUnit.DAYS).minus(1, ChronoUnit.SECONDS));
         String keyOne = tagOne.getText();
         String firstValue = valueOne.getText();
         if (start!=null){
@@ -52,18 +53,20 @@ public class SearchController {
         }
         if (start!=null) {
             if (keyOne == null || keyOne.isEmpty()) {
-                if (firstValue != null) {
+                if (firstValue != null && !firstValue.isEmpty()) {
+                    System.out.println(firstValue);
+                    System.out.println(keyOne);
                     Alert error = new Alert(Alert.AlertType.ERROR);
                     error.setTitle("Search Error");
-                    error.setContentText("Incomplete Criteria");
+                    error.setContentText("No Value");
                     error.showAndWait();
                     return;
                 }
             } else if (firstValue == null || firstValue.isEmpty()) {
-                if (keyOne != null) {
+                if (keyOne != null && !keyOne.isEmpty()) {
                     Alert error = new Alert(Alert.AlertType.ERROR);
                     error.setTitle("Search Error");
-                    error.setContentText("Incomplete Criteria");
+                    error.setContentText("No Key");
                     error.showAndWait();
                     return;
                 }
