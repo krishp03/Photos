@@ -106,7 +106,7 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
 
-        welcomeMessage.setText(user.username + "'s Photo Gallery");
+        welcomeMessage.setText(user.getUsername() + "'s Photo Gallery");
         for (Album a: user.getAlbums()) albumListView.getItems().add(a);
         albumListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Album>(){
 

@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Photo implements Serializable {
-    public static File image;
-    public static HashMap<String, ArrayList<String>> tags;
+    public File image;
+    public HashMap<String, ArrayList<String>> tags;
     public String caption;
-    public static Date date;
+    public Date date;
 
     private Calendar calendar;
 
@@ -23,22 +23,22 @@ public class Photo implements Serializable {
     }
 
     public void addTag(String tag, String value){
-        if (tags.containsKey(tag)){
+        if (!tags.containsKey(tag)){
             ArrayList<String> values = new ArrayList<>();
             tags.put(tag, values);
         }
         tags.get(tag).add(value);
     }
 
-    public boolean deleteTag(String tag, String value) throws IOException {
-        try{
-            tags.get(tag).remove(value);
-            return true;
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
+//    public boolean deleteTag(String tag, String value) throws IOException {
+//        try{
+//            tags.get(tag).remove(value);
+//            return true;
+//        }
+//        catch(Exception e){
+//            return false;
+//        }
+//    }
 
     public void setCaption(String caption){
         this.caption=caption;
@@ -46,6 +46,15 @@ public class Photo implements Serializable {
 
     public String getCaption(){
         return caption;
+    }
+    public Date getDate(){
+        return date;
+    }
+    public File getImage(){
+        return image;
+    }
+    public HashMap<String, ArrayList<String>> getTags(){
+        return tags;
     }
 
     public String toString(){return caption;}

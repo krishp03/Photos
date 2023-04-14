@@ -21,12 +21,14 @@ public class Album{
 
     public Date getEarliestDate(){
         if (photos.size()==0) return null;
+        if (photos.get(0)==null) return null;
         Date x = photos.get(0).date;
         for (int i=1; i<photos.size();i++) if (photos.get(i).date.compareTo(x)<0) x=photos.get(i).date;
         return x;
     }
     public Date getLatestDate(){
         if (photos.size()==0) return null;
+        if (photos.get(0)==null) return null;
         Date x = photos.get(0).date;
         for (int i=1; i<photos.size();i++) if (photos.get(i).date.compareTo(x)>0) x=photos.get(i).date;
         return x;

@@ -6,13 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -59,22 +59,60 @@ public class AlbumController implements Initializable {
         Photo newPhoto = new Photo(photoFile, caption);
         photosListView.getItems().add(newPhoto);
         album.addPhoto(newPhoto);
-        showAlbum();
+//        showAlbum();
+        App.setRoot("albumView");
     }
     public void startSearch() throws IOException{
+        SearchController.album=album;
         App.setRoot("searchScreen");
     }
     public void openPhoto() throws IOException{
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        if (p==null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Photo Open Error");
+            error.setContentText("No Photo Selected");
+            error.showAndWait();
+            return;
+        }
+        PhotoController.p = p;
+        PhotoController.a = album;
+        PhotoController.u = user;
         App.setRoot("photoDisplay");
     }
     public void deletePhoto() throws IOException{
-        showAlbum();
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        photosListView.getItems().remove(p);
+        album.deletePhoto(p);
+//        showAlbum();
+        App.setRoot("albumView");
     }
     public void movePhoto() throws IOException{
+        MoveController.user = user;
+        MoveController.currAlbum=album;
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        if (p==null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Photo Move Error");
+            error.setContentText("No Photo Selected");
+            error.showAndWait();
+            return;
+        }
+        MoveController.photo=p;
+        album.deletePhoto(p);
         App.setRoot("movePhoto");
-        showAlbum();
     }
     public void copyPhoto() throws IOException{
+        CopyController.user = user;
+        Photo p = photosListView.getSelectionModel().getSelectedItem();
+        if (p==null){
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Photo Copy Error");
+            error.setContentText("No Photo Selected");
+            error.showAndWait();
+            return;
+        }
+        CopyController.photo=p;
         App.setRoot("copyPhoto");
     }
     public void createFromResults() throws IOException{
@@ -92,7 +130,10 @@ public class AlbumController implements Initializable {
             }
         }
         Album a = new Album(newName);
+        for (Photo p:album.getPhotos()) a.addPhoto(p);
         user.addAlbum(a);
+        AlbumController.album=a;
+        App.setRoot("albumView");
     }
 
     private void showAlbum(){
@@ -108,7 +149,39 @@ public class AlbumController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        for (Photo p: album.getPhotos()) {
+            photosListView.setCellFactory(par -> new ListCell<Photo>() {
+                ImageView thumbnail;
+                {
+                    try {
+                        Image image = new Image(p.getImage().toURI().toString());
+                        thumbnail = new ImageView(image);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void updateItem(Photo p, boolean empty) {
+                    super.updateItem(p, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        try {
+                            thumbnail.setImage(new Image(p.getImage().toURI().toString()));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        thumbnail.setFitHeight(100);
+                        thumbnail.setFitWidth(100);
+                        setText(p.getCaption());
+                        setGraphic(thumbnail);
+                    }
+                }
+            });
+            photosListView.getItems().add(p);
+        }
         showAlbum();
-        for (Photo a: album.getPhotos()) photosListView.getItems().add(a);
     }
 }

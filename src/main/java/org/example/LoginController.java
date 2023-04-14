@@ -20,7 +20,7 @@ public class LoginController {
             return;
         }
         for (User u:Admin.users){
-            if (u.username.equals(name)) {
+            if (u.getUsername().equals(name)) {
                 HomeController.user=u;
                 if (u.getAlbums() == null) u.initAlbums();
                 App.setRoot("home");
