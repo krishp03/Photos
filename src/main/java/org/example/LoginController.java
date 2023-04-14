@@ -19,7 +19,7 @@ public class LoginController {
     public static String name;
     @FXML private TextField loginName;
     @FXML
-    ListView<User> userListView;
+    public ListView<User> userListView;
 
     /**
      * Logs in to admin or user system depending on username
